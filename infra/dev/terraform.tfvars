@@ -9,4 +9,12 @@ rgs = {
             env= "dev"
         }
     }
+    rg2= {
+        rg_name = "rg-dev-002"
+        location = "central india"
+        
+        tags= {
+            env= "dev"
+        }
+    }
 }
