@@ -1,10 +1,10 @@
 name: "Terraform Azure Deploy (CI)"
 
 on:
-  workflow_dispatch: 
-  # push:
-  #   branches:
-  #     - "main"
+  # workflow_dispatch: 
+  push:
+    branches:
+      - "main"
      
 
   
@@ -39,6 +39,6 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan
-        working-directory: ./terraform_infra
+        working-directory: ./infra/dev
       
 
