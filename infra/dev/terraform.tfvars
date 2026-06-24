@@ -4,5 +4,9 @@ rgs = {
     rg1= {
         rg_name = "rg-dev-001"
         location = "central india"
+        
+        tags= {
+            env= "dev"
+        }
     }
 }
