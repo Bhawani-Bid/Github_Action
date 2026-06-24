@@ -1,11 +1,9 @@
-name: "Terraform Azure Deploy (CI)"
+name: "Terraform Azure Deploy (CD)"
 
 on:
-  workflow_dispatch: 
-  # push:
-  #   branches:
-  #     - "main"
-     
+  pull_request:
+    
+    
 
   
 
@@ -37,8 +35,8 @@ jobs:
         run: terraform init
         working-directory: ./infra/dev
 
-      - name: Terraform Plan
-        run: terraform plan
-        working-directory: ./terraform_infra
+      - name: Terraform Apply
+        run: terraform apply --auto-approve
+        working-directory: ./infra/dev
       
 
