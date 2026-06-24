@@ -2,7 +2,7 @@ name: "Terraform Azure Deploy (CI)"
 
 on:
   # workflow_dispatch: 
-  push:
+  pull_request:
     branches:
       - "main"
      
