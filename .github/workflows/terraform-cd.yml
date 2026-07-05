@@ -1,9 +1,10 @@
 # name: "Terraform Azure Deploy (CD)"
 
 # on:
+  # workflow_dispatch:
 #   push:
 #     branches:
-#       - main 
+#      
     
 
 # permissions:
