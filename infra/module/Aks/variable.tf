@@ -1,14 +1,3 @@
-variable "subscription_id" {
-    type = string
-}
-variable "rgs" {
-    type = map(object({
-        rg_name  = string
-        location = string
-        tags     = map(string)
-    }))
-}
-
 variable "aks" {
   description = "Aks variable details"
   type = map(object({
@@ -23,3 +12,6 @@ variable "aks" {
     tags           = map(string)
   }))
 }
+
+
+
