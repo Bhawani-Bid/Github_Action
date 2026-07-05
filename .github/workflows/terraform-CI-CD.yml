@@ -3,7 +3,10 @@ name: "Terraform Azure Deploy (CI/CD)"
 on:
   push:
     branches:
-      - main 
+      - "main" 
+  pull_request:
+    branches:
+     - "main"    
     
 
 permissions:
