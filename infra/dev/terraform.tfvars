@@ -3,7 +3,7 @@ subscription_id = "e258ea45-c35f-4571-97f6-e9015f23dafd"
 rgs = {
   rg1 = {
     rg_name  = "rg-dev-001"
-    location = "central india"
+    location = "Australia Central"
 
     tags = {
       env = "dev"
@@ -14,12 +14,12 @@ rgs = {
 aks = {
   aks1 = {
     aks_name       = "AksCluster-dev"
-    location       = "central india"
+    location       = "Australia Central"
     rg_name        = "rg-dev-001"
     dns_prefix     = "dev-aks"
     node_pool_name = "default"
     node_count     = 1
-    vm_size        = "Standard_B4ps_v2"
+    vm_size        = "Standard_DC4s_v3"
     identity_type  = "SystemAssigned"
 
     tags = {
