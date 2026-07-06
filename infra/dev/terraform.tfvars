@@ -19,7 +19,7 @@ aks = {
     dns_prefix     = "dev-aks"
     node_pool_name = "default"
     node_count     = 1
-    vm_size        = "Standard_D2_v5"
+    vm_size        = "Standard_B4ps_v2"
     identity_type  = "SystemAssigned"
 
     tags = {
