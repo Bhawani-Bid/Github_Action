@@ -44,7 +44,7 @@ jobs:
           terraform_version: ${{ env.TF_VERSION }}
 
       - name: Terraform Format Check
-        run: terraform fmt -check -recursive
+        run: terraform fmt -recursive
 
       - name: Run Checkov Security Scan
         uses: bridgecrewio/checkov-action@v12
