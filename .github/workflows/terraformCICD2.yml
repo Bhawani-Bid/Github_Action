@@ -1,0 +1,114 @@
+name: Terraform Azure Deploy (CI/CD)
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: terraform-dev
+  cancel-in-progress: true
+
+env:
+  TF_WORKING_DIR: ./infra/dev
+  TF_VERSION: "1.13.0"
+
+jobs:
+
+# ==========================================================
+# PR Validation Job
+# ==========================================================
+  terraform-validate-plan:
+    name: Terraform Validate & Plan
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Run Checkov Security Scan
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: ./infra
+          soft_fail: true
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Terraform Init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init
+
+      - name: Terraform Validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform plan -out=tfplan
+
+      - name: Upload Terraform Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan
+          path: ${{ env.TF_WORKING_DIR }}/tfplan
+
+
+# ==========================================================
+# Deployment Job
+# ==========================================================
+  terraform-apply:
+    name: Terraform Apply
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+
+    environment: dev
+
+    steps:
+
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Terraform Init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init
+
+      - name: Terraform Apply
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform apply -auto-approve
